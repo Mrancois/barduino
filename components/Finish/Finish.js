@@ -37,6 +37,10 @@ class Finish extends React.Component {
     }, 500);
   }
 
+  componentWillUnmount() {
+    clearInterval();
+  }
+
   render() {
     return (
       <div>

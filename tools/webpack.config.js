@@ -27,6 +27,13 @@ const babelConfig = Object.assign({}, pkg.babel, {
 // Webpack configuration (main.js => public/dist/main.{hash}.js)
 // http://webpack.github.io/docs/configuration.html
 const config = {
+  node: {
+    console: true,
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty',
+    child_process: 'empty',
+  },
 
   // The base directory for resolving the entry option
   context: path.resolve(__dirname, '../src'),

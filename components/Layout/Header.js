@@ -26,13 +26,7 @@ class Header extends React.Component {
   render() {
     return (
       <header className={`mdl-layout__header ${s.header}`} ref={node => (this.root = node)}>
-        <div className={`mdl-layout__header-row ${s.row}`}>
-          <Link className={`mdl-layout-title ${s.title}`} to="/">
-            React Static Boilerplate
-          </Link>
-          <div className="mdl-layout-spacer" />
-          <Navigation />
-        </div>
+        <p>Header</p>
       </header>
     );
   }

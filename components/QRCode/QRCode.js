@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 // import s from './Wait.css';
 import QrReader from 'react-qr-reader';
+import config from '../../config/config.yaml';
 
 class QRCode extends React.Component {
   static propTypes = {
@@ -20,6 +21,7 @@ class QRCode extends React.Component {
     };
     this.handleScan = this.handleScan.bind(this);
     this.handleError = this.handleError.bind(this);
+    console.log(config);
   }
 
   componentDidMount() {
@@ -29,39 +31,43 @@ class QRCode extends React.Component {
   handleScan(data) {
     console.log(data);
     // ON FIND QRCODE -> CHECK IF ELEMENT EXIST
-    const url = `https://script.google.com/macros/s/AKfycbzPs_w9PfbFPGAoYj7agl_M9jeBPZpGA9PzGF6ihOja1-xB1ws/exec?path=queue&queue=one&qrc=${data}`;
-    console.log(url);
-    fetch(url)
-      .then(response => response.json())
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('OK');
-          console.log(response);
+    if (data != null) {
+      const url = `https://script.google.com/macros/s/AKfycbzPs_w9PfbFPGAoYj7agl_M9jeBPZpGA9PzGF6ihOja1-xB1ws/exec?path=queue&queue=one&qrc=${data}`;
+      console.log(url);
+      fetch(url)
+        .then(response => response.json())
+        .then((response) => {
+          if (response.status === 200) {
+            console.log('OK');
+            console.log(response);
 
-          // pass qrcode to base component via props
-          this.props.setQRCode(response.id);
+            // pass qrcode to base component via props
+            this.props.setQRCode(response.id);
 
-          // pass uid to base component
-          this.props.setIDUSer(response.idUser);
+            // pass uid to base component
+            this.props.setIDUSer(response.idUser);
 
-          // pass id drink
-          this.props.setIDDrink(response.idDrink);
+            // pass id drink
+            this.props.setIDDrink(response.idDrink);
 
-          // pass type of drink
-          this.props.setTypeDrink(response.type);
+            // pass type of drink
+            this.props.setTypeDrink(response.type);
 
-          // incr step (from base component) to pass to the next component
-          this.props.incrStep();
-        } else {
+            // incr step (from base component) to pass to the next component
+            this.props.incrStep();
+          } else {
+            console.log('ERR');
+            this.setState({ message: 'Votre commande n\'est pas valide !' });
+          }
+        })
+        .catch((e) => {
           console.log('ERR');
-          this.setState({ message: 'Le QRCode n\'est pas reconnu, merci de réessayer' });
-        }
-      })
-      .catch((e) => {
-        console.log('ERR');
-        this.setState({ message: 'Erreur de réseau' });
-        console.log(e);
-      });
+          this.setState({ message: 'Erreur de réseau' });
+          console.log(e);
+        });
+    } else {
+      this.setState({ message: 'Placez votre telephone sous le lecteur !' });
+    }
     // this.setState({ result: data });
   }
 
