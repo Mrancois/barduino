@@ -29,6 +29,11 @@ class HomePage extends React.Component {
     this.python2 = this.python2.bind(this);
     this.incrStep = this.incrStep.bind(this);
     this.decrStep = this.decrStep.bind(this);
+
+    this.setQRCode = this.setQRCode.bind(this);
+    this.setUser = this.setUser.bind(this);
+    this.setCocktail = this.setCocktail.bind(this);
+    this.setRecipe = this.setRecipe.bind(this);
   }
 
 /*
@@ -41,17 +46,18 @@ class HomePage extends React.Component {
     this.setState({ qrcode });
   }
 
-  setIDUSer(iduser) {
-    this.setState({ user: iduser });
+  setUser(user) {
+    this.setState({ user });
   }
 
-  setIDDrink(drink) {
-    this.setState({ drink });
+  setCocktail(cocktail) {
+    this.setState({ cocktail });
   }
 
-  setTypeDrink(type) {
-    this.setState({ type });
+  setRecipe(recipe) {
+    this.setState({ recipe });
   }
+
 
   incrStep() {
     this.setState({ step: this.state.step + 1 });
@@ -103,9 +109,8 @@ class HomePage extends React.Component {
           <QRCode
             incrStep={this.incrStep}
             setQRCode={this.setQRCode}
-            setIDUSer={this.setIDUSer}
-            setIDDrink={this.setIDDrink}
-            setTypeDrink={this.setTypeDrink}
+            setUser={this.setUser}
+            setCocktail={this.setCocktail}
           />
           /* <p>QRCODE</p> */
         );
@@ -114,14 +119,20 @@ class HomePage extends React.Component {
         componentToRender = (
           <Wait
             user={this.state.user}
-            drink={this.state.drink}
-            type={this.state.type}
+            cocktail={this.state.cocktail}
+            setRecipe={this.setRecipe}
+            incrStep={this.incrStep}
           />
         );
         break;
       case 2:
         componentToRender = (
-          <Serve />
+          <Serve
+            user={this.state.user}
+            cocktail={this.state.cocktail}
+            recipe={this.state.recipe}
+            incrStep={this.incrStep}
+          />
         );
         break;
       case 3:
@@ -138,7 +149,7 @@ class HomePage extends React.Component {
       <Layout className={s.content}>
         <p>HOME</p>
         {componentToRender}
-        {this.state.step}
+        <p>{this.state.step}</p>
         <button
           onClick={() => this.python1()}
         >
