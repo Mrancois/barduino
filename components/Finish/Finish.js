@@ -5,9 +5,7 @@ import s from './Finish.css';
 /*
 *
 * TODO :
-* 1 - Wait 5s
-* 2 - incrStep
-* 3 - reset
+*
 */
 
 

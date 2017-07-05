@@ -1,3 +1,5 @@
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
+
 import React, { PropTypes } from 'react';
 import PythonShell from 'python-shell';
 // import s from './Wait.css';
@@ -6,30 +8,89 @@ import PythonShell from 'python-shell';
 /*
 *
 * TODO :
-* 1 - Config runMotor()
-* 2 - Call at the good moment runMotor() (SHOULD be call 2 times)
-* 3 - Check results
-* 4 - incrStep
 *
 */
 
 
 class Serve extends React.Component {
   static propTypes = {
-    theProp: PropTypes.string,
+    user: PropTypes.object,
+    cocktail: PropTypes.object,
+    recipe: PropTypes.object,
+    incrStep: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       message: '',
+      step: 0,
     };
   }
 
   componentDidMount() {
     console.log('mount Serve');
-    this.runMotor();
+    console.log(this.props.user);
+    console.log(this.props.cocktail);
+    console.log(this.props.recipe);
+    // this.runMotor();
+
+    // run drink 1
+    /*
+    const recipe = this.props.recipe;
+    this.runMotor(recipe.drink1[0], recipe.drink1[1]);
+    // run drink 2
+    this.runMotor(recipe.drink2[0], recipe.drink2[1]);
+    */
+    this.runAirPump();
   }
+
+  componentWillUnmount() {
+    this.incrStep();
+  }
+
+
+  pythonScript(gpio, seconds, type) {
+    return new Promise((resolve, reject) => {
+      const options = {
+        mode: 'text',
+        scriptPath: 'path/to/my/scripts', // put path script here
+        args: [gpio, seconds],
+      };
+
+      const script = (type === 'hard') ? 'need_script_hard.py' : 'test4.py';
+
+      PythonShell.run(script, options, (err, results) => {
+        if (results && !err) {
+          // results is an array consisting of messages collected during execution
+          console.log('results: %j', results);
+          (this.state.step === 2) ?
+            this.props.incrStep() :
+            this.setState({ step: this.state.step + 1 });
+          resolve(results);
+        } else {
+          this.setState({ message: 'Error while executing python script' });
+          reject(err);
+        }
+      });
+    });
+  }
+
+
+  runAirPump() {
+    const recipe = this.props.recipe;
+    this.pythonScript(recipe.drink1[0], recipe.drink1[1], recipe.drink1[2])
+      .then((result) => {
+        // here after air pump 1
+        console.log(result);
+        this.pythonScript(recipe.drink2[0], recipe.drink2[1], recipe.drink2[2])
+          .then((result2) => {
+            // here after air pump 2
+            console.log(result2);
+          });
+      });
+  }
+
 
   runMotor(gpio, seconds) {
     console.log(this); // useless for remove warning
@@ -44,10 +105,13 @@ class Serve extends React.Component {
       args: [gpio, seconds],
     };
 
-    PythonShell.run('my_script.py', options, (err, results) => {
+    PythonShell.run('test4.py', options, (err, results) => {
       if (results && !err) {
         // results is an array consisting of messages collected during execution
         console.log('results: %j', results);
+        (this.state.step === 2) ?
+          this.props.incrStep() :
+          this.setState({ step: this.state.step + 1 });
       } else {
         this.setState({ message: 'Error while executing python script' });
       }

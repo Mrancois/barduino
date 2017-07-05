@@ -1,23 +1,23 @@
 import React, { PropTypes } from 'react';
 // import s from './Wait.css';
 import QrReader from 'react-qr-reader';
-import config from '../../config/config.yaml';
+import config from '../../config/config.json';
 
 class QRCode extends React.Component {
   static propTypes = {
     incrStep: PropTypes.func,
     setQRCode: PropTypes.func,
-    setIDUSer: PropTypes.func,
-    setIDDrink: PropTypes.func,
-    setTypeDrink: PropTypes.func,
+    setUser: PropTypes.func,
+    setCocktail: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      delay: 100,
+      delay: 2000,
       result: 'No result',
       message: '',
+      scanned: '',
     };
     this.handleScan = this.handleScan.bind(this);
     this.handleError = this.handleError.bind(this);
@@ -32,31 +32,39 @@ class QRCode extends React.Component {
     console.log(data);
     // ON FIND QRCODE -> CHECK IF ELEMENT EXIST
     if (data != null) {
-      const url = `https://script.google.com/macros/s/AKfycbzPs_w9PfbFPGAoYj7agl_M9jeBPZpGA9PzGF6ihOja1-xB1ws/exec?path=queue&queue=one&qrc=${data}`;
+      console.log(config);
+      this.setState({ scanned: data });
+      // const url = `https://script.google.com/macros/s/AKfycbzPs_w9PfbFPGAoYj7agl_M9jeBPZpGA9PzGF6ihOja1-xB1ws/exec?path=queue&queue=one&qrc=${data}`;
+      const url = `${config.url.api}/queues`; // data should be equal to id of the element in the queue
       console.log(url);
-      fetch(url)
+      fetch(url, {
+        method: 'GET',
+        headers: new Headers({
+          Authorization: 'Basic 0fccb49a63af4daa0ce6b126158dfc040af8aaaf6bbc1eb1b20e519f9bec3780',
+          // 'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        }),
+        mode: 'cors',
+      })
         .then(response => response.json())
         .then((response) => {
-          if (response.status === 200) {
-            console.log('OK');
-            console.log(response);
-
-            // pass qrcode to base component via props
-            this.props.setQRCode(response.id);
-
+          console.log(response);
+          // NEED FIX : CHANGE ID DRINK WITH ${data} /!\
+          const indexOfOrder = response.findIndex(i => i.uuid === 'a4c4f0f4-f9db-4458-a2f5-b62a7aa25c2a');
+          console.log(indexOfOrder);
+          if (indexOfOrder !== -1) {
+            // pass qrcode to base component
+            this.props.setQRCode('a4c4f0f4-f9db-4458-a2f5-b62a7aa25c2a');
             // pass uid to base component
-            this.props.setIDUSer(response.idUser);
-
+            const user = response[indexOfOrder].user;
+            delete user.user.password;
+            this.props.setUser(user);
             // pass id drink
-            this.props.setIDDrink(response.idDrink);
-
-            // pass type of drink
-            this.props.setTypeDrink(response.type);
-
+            this.props.setCocktail(response[indexOfOrder].cocktail);
             // incr step (from base component) to pass to the next component
             this.props.incrStep();
           } else {
-            console.log('ERR');
+            console.log('Bad QRCode');
             this.setState({ message: 'Votre commande n\'est pas valide !' });
           }
         })
@@ -86,6 +94,7 @@ class QRCode extends React.Component {
       <div>
         <p>Step 0 : QRCode</p>
         <p>{this.state.message}</p>
+        <h1>{this.state.scanned || 'null'}</h1>
         <QrReader
           delay={this.state.delay}
           style={previewStyle}
