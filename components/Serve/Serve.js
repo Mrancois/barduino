@@ -2,6 +2,7 @@
 
 import React, { PropTypes } from 'react';
 import PythonShell from 'python-shell';
+import config from '../../config/config.json';
 // import s from './Wait.css';
 
 
@@ -53,7 +54,7 @@ class Serve extends React.Component {
     return new Promise((resolve, reject) => {
       const options = {
         mode: 'text',
-        // scriptPath: 'path/to/my/scripts',
+        scriptPath: config.pathScript,
         args: [gpio, seconds],
       };
 

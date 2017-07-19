@@ -8,5 +8,6 @@
 		"vodka": "17",
 		"jus d'orange": "10"
 	},
-	"token": "5f5074e51e3ce9bbb1786d3d37af31dd87e53c8d21ada1a327eca02819662be6"
+	"token": "5f5074e51e3ce9bbb1786d3d37af31dd87e53c8d21ada1a327eca02819662be6",
+	"pathScript": "/home/pi/Documents/BarDuino/py/test4.py"
 }
