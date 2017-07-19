@@ -42,7 +42,19 @@ class Serve extends React.Component {
     // run drink 2
     this.runMotor(recipe.drink2[0], recipe.drink2[1]);
     */
-    this.runAirPump();
+    const options = {
+      mode: 'text',
+      scriptPath: '/home/pi/Documents/BarDuino/py',
+      pythonPath: '/usr/bin/python',
+      args: ['17', '2'],
+    };
+
+    PythonShell.run('test4.py', options, (err, results) => {
+      if (err) throw err;
+      // results is an array consisting of messages collected during execution
+      console.log('results: %j', results);
+    });
+    // this.runAirPump();
   }
 
   componentWillUnmount() {
