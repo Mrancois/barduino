@@ -5,9 +5,6 @@ import PythonShell from 'python-shell';
 
 import config from '../../config/config.json';
 // import s from './Wait.css';
-const { spawn } = require('child_process');
-
-var child = spawn('pwd');
 /*
 *
 * TODO :
