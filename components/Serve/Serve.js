@@ -2,10 +2,12 @@
 
 import React, { PropTypes } from 'react';
 import PythonShell from 'python-shell';
+
 import config from '../../config/config.json';
 // import s from './Wait.css';
+const { spawn } = require('child_process');
 
-
+var child = spawn('pwd');
 /*
 *
 * TODO :
@@ -31,6 +33,7 @@ class Serve extends React.Component {
 
   componentDidMount() {
     console.log('mount Serve');
+    console.log(config);
     console.log(this.props.cocktail);
     console.log(this.props.recipe);
     // this.runMotor();
@@ -54,13 +57,14 @@ class Serve extends React.Component {
     return new Promise((resolve, reject) => {
       const options = {
         mode: 'text',
-        scriptPath: config.pathScript,
+        scriptPath: '/home/pi/Documents/BarDuino/py/test4.py',
+        pythonPath: '/usr/bin/python',
         args: [gpio, seconds],
       };
 
       const script = (type === 'hard') ? 'test4.py' : 'test4.py';
 
-      PythonShell.run(script, options, (err, results) => {
+      PythonShell.run('/home/pi/Documents/BarDuino/py/test4.py', options, (err, results) => {
         if (results && !err) {
           // results is an array consisting of messages collected during execution
           console.log('results: %j', results);
