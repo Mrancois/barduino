@@ -14,7 +14,7 @@ import PythonShell from 'python-shell';
 
 class Serve extends React.Component {
   static propTypes = {
-    user: PropTypes.object,
+    reset: PropTypes.func,
     cocktail: PropTypes.object,
     recipe: PropTypes.object,
     incrStep: PropTypes.func,
@@ -30,7 +30,6 @@ class Serve extends React.Component {
 
   componentDidMount() {
     console.log('mount Serve');
-    console.log(this.props.user);
     console.log(this.props.cocktail);
     console.log(this.props.recipe);
     // this.runMotor();
@@ -54,11 +53,11 @@ class Serve extends React.Component {
     return new Promise((resolve, reject) => {
       const options = {
         mode: 'text',
-        scriptPath: 'path/to/my/scripts', // put path script here
+        // scriptPath: 'path/to/my/scripts',
         args: [gpio, seconds],
       };
 
-      const script = (type === 'hard') ? 'need_script_hard.py' : 'test4.py';
+      const script = (type === 'hard') ? 'test4.py' : 'test4.py';
 
       PythonShell.run(script, options, (err, results) => {
         if (results && !err) {
@@ -69,6 +68,7 @@ class Serve extends React.Component {
             this.setState({ step: this.state.step + 1 });
           resolve(results);
         } else {
+          this.props.reset();
           this.setState({ message: 'Error while executing python script' });
           reject(err);
         }
@@ -89,33 +89,6 @@ class Serve extends React.Component {
             console.log(result2);
           });
       });
-  }
-
-
-  runMotor(gpio, seconds) {
-    console.log(this); // useless for remove warning
-    // DOC: https://www.npmjs.com/package/python-shell
-
-    console.log(gpio);
-    console.log(seconds);
-
-    const options = {
-      mode: 'text',
-      scriptPath: 'path/to/my/scripts', // put path script here
-      args: [gpio, seconds],
-    };
-
-    PythonShell.run('test4.py', options, (err, results) => {
-      if (results && !err) {
-        // results is an array consisting of messages collected during execution
-        console.log('results: %j', results);
-        (this.state.step === 2) ?
-          this.props.incrStep() :
-          this.setState({ step: this.state.step + 1 });
-      } else {
-        this.setState({ message: 'Error while executing python script' });
-      }
-    });
   }
 
   render() {

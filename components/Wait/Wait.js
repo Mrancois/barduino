@@ -11,7 +11,6 @@ import config from '../../config/config.json';
 
 class Wait extends React.Component {
   static propTypes = {
-    user: PropTypes.object,
     cocktail: PropTypes.object,
     setRecipe: PropTypes.func,
     incrStep: PropTypes.func,
@@ -29,7 +28,6 @@ class Wait extends React.Component {
     console.log('mount Wait');
 
     console.log(this.props.cocktail);
-    console.log(this.props.user);
     console.log(config);
 
     this.buildPython();
@@ -68,7 +66,8 @@ class Wait extends React.Component {
       const serve = {};
       serve.drink1 = drink1;
       serve.drink2 = drink2;
-
+      console.log('Server: ');
+      console.log(serve);
       this.props.setRecipe(serve);
       this.props.incrStep();
     } else {
@@ -81,7 +80,7 @@ class Wait extends React.Component {
     return (
       <div>
         <p>Step 1 : Wait</p>
-        <p>Hello {this.props.user.user.username}, wait to get your {this.props.cocktail.name}</p>
+        <p>Hello, wait to get your {this.props.cocktail.name}</p>
       </div>
     );
   }

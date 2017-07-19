@@ -58,7 +58,6 @@ class HomePage extends React.Component {
     this.setState({ recipe });
   }
 
-
   incrStep() {
     this.setState({ step: this.state.step + 1 });
   }
@@ -66,6 +65,7 @@ class HomePage extends React.Component {
   decrStep() {
     this.setState({ step: this.state.step - 1 });
   }
+
 
   reset() {
     this.setState({
@@ -107,6 +107,7 @@ class HomePage extends React.Component {
       case 0:
         componentToRender = (
           <QRCode
+            reset={this.reset}
             incrStep={this.incrStep}
             setQRCode={this.setQRCode}
             setUser={this.setUser}
@@ -118,7 +119,6 @@ class HomePage extends React.Component {
       case 1:
         componentToRender = (
           <Wait
-            user={this.state.user}
             cocktail={this.state.cocktail}
             setRecipe={this.setRecipe}
             incrStep={this.incrStep}
@@ -128,7 +128,7 @@ class HomePage extends React.Component {
       case 2:
         componentToRender = (
           <Serve
-            user={this.state.user}
+            reset={this.reset}
             cocktail={this.state.cocktail}
             recipe={this.state.recipe}
             incrStep={this.incrStep}

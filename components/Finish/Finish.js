@@ -27,6 +27,9 @@ class Finish extends React.Component {
     setInterval(() => {
       if (this.state.seconds === 20) {
         // reset
+        if (this.props.error) {
+          this.incrStep();
+        }
         clearInterval();
         this.props.reset();
       } else {
