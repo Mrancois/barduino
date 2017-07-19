@@ -49,10 +49,9 @@ class Serve extends React.Component {
       args: ['17', '2'],
     };
 
-    PythonShell.run('test4.py', options, (err, results) => {
+    PythonShell.run('test4.py', options, (err) => {
       if (err) throw err;
       // results is an array consisting of messages collected during execution
-      console.log('results: %j', results);
     });
     // this.runAirPump();
   }
