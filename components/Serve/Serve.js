@@ -47,6 +47,7 @@ class Serve extends React.Component {
       scriptPath: '/home/pi/Documents/BarDuino/py',
       pythonPath: '/usr/bin/python',
       args: ['17', '2'],
+      pythonOptions: ['-u'],
     };
 
     PythonShell.run('test4.py', options, (err) => {
