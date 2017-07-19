@@ -3,6 +3,7 @@
 		"api": "https://api-barduino.herokuapp.com"
 	},
 	"drinks": {
+		"test": "10",
 		"jus de pomme": "22",
 		"vodka": "17",
 		"jus d'orange": "10"
