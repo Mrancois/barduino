@@ -54,14 +54,14 @@ class Serve extends React.Component {
     return new Promise((resolve, reject) => {
       const options = {
         mode: 'text',
-        scriptPath: '/home/pi/Documents/BarDuino/py/test4.py',
+        scriptPath: '/home/pi/Documents/BarDuino/py/',
         pythonPath: '/usr/bin/python',
         args: [gpio, seconds],
       };
 
       const script = (type === 'hard') ? 'test4.py' : 'test4.py';
 
-      PythonShell.run('/home/pi/Documents/BarDuino/py/test4.py', options, (err, results) => {
+      PythonShell.run(script, options, (err, results) => {
         if (results && !err) {
           // results is an array consisting of messages collected during execution
           console.log('results: %j', results);
