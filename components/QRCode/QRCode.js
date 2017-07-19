@@ -44,7 +44,7 @@ class QRCode extends React.Component {
           // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         }),
-        mode: 'cors',
+        mode: 'no-cors',
       })
         .then(response => response.json())
         .then((response) => {
