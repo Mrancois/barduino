@@ -28,6 +28,42 @@ class QRCode extends React.Component {
     console.log('mount QRCode');
   }
 
+  requestAPI(url) {
+    const xhr = new XMLHttpRequest();
+    const method = 'GET';
+    xhr.open(method, url, true);
+    /*
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        console.log(xhr.responseText);
+        const jsonRep = JSON.stringify(xhr.responseText);
+        this.props.setQRCode(data);
+        this.props.setCocktail(jsonRep.cocktail);
+        this.props.incrStep();
+      }
+    };
+    */
+    xhr.send(null);
+
+    return xhr;
+  }
+
+  requestQRCode(r) {
+    console.log('TOTOT ?');
+    console.log(this);
+    console.log(r);
+    console.log('oo');
+    console.log(r.responseText);
+    if (r.status === 200) {
+      console.log('ICI ?');
+      console.log(r.responseText);
+      const jsonRep = JSON.stringify(r.responseText);
+      this.props.setQRCode(this.state.scanned);
+      this.props.setCocktail(jsonRep.cocktail);
+      this.props.incrStep();
+    }
+  }
+
   handleScan(data) {
     console.log(data);
     // ON FIND QRCODE -> CHECK IF ELEMENT EXIST
@@ -37,6 +73,33 @@ class QRCode extends React.Component {
       // const url = `https://script.google.com/macros/s/AKfycbzPs_w9PfbFPGAoYj7agl_M9jeBPZpGA9PzGF6ihOja1-xB1ws/exec?path=queue&queue=one&qrc=${data}`;
       const url = `${config.url.api}/validecommande/${data}`; // data should be equal to id of the element in the queue
       console.log(url);
+
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          console.log('OK ????');
+          const jsonRep = JSON.parse(xhr.responseText);
+          console.log(jsonRep);
+          this.props.setQRCode(data);
+          this.props.setCocktail(jsonRep.cocktail);
+          this.props.incrStep();
+        }
+      };
+
+      xhr.open('GET', url, true);
+      xhr.send();
+      // const xhr = this.requestAPI(url);
+      // this.requestQRCode(xhr);
+      /*
+      if (xhr.status === 200) {
+        console.log(xhr.responseText);
+        const jsonRep = JSON.stringify(xhr.responseText);
+        this.props.setQRCode(data);
+        this.props.setCocktail(jsonRep.cocktail);
+        this.props.incrStep();
+      }
+      */
+      /*
       fetch(url, {
         method: 'GET',
         headers: new Headers({
@@ -61,6 +124,7 @@ class QRCode extends React.Component {
             this.props.reset();
           }
         });
+      */
     } else {
       this.setState({ message: 'Placez votre telephone sous le lecteur !' });
     }
