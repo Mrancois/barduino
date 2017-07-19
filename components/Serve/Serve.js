@@ -65,7 +65,7 @@ class Serve extends React.Component {
     return new Promise((resolve, reject) => {
       const options = {
         mode: 'text',
-        scriptPath: '/home/pi/Documents/BarDuino/py/',
+        scriptPath: '/home/pi/Documents/BarDuino/py',
         pythonPath: '/usr/bin/python',
         args: [gpio, seconds],
       };
