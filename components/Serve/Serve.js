@@ -4,6 +4,8 @@ import React, { PropTypes } from 'react';
 import PythonShell from 'python-shell';
 
 import config from '../../config/config.json';
+
+const { spawn } = require('child_process');
 // import s from './Wait.css';
 /*
 *
@@ -56,6 +58,7 @@ class Serve extends React.Component {
       // results is an array consisting of messages collected during execution
     });
     */
+    /*
     const python = require('child_process').spawn(
       'python',
       // second argument is array of parameters, e.g.:
@@ -72,6 +75,19 @@ class Serve extends React.Component {
       }
       console.log(output);
       console.log(code);
+    });
+    */
+
+    const child = spawn('python', ['/home/pi/Documents/BarDuino/py/test4.py', '17', '2']);
+    child.stdout.on('data', (chunk) => {
+      // data from standard output is here as buffers
+      console.log(chunk);
+    });
+
+    child.stderr.pipe('');
+
+    child.on('close', (code) => {
+      console.log(`child process exited with code ${code}`);
     });
     // this.runAirPump();
   }
