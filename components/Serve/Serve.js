@@ -42,6 +42,7 @@ class Serve extends React.Component {
     // run drink 2
     this.runMotor(recipe.drink2[0], recipe.drink2[1]);
     */
+    /*
     const options = {
       mode: 'text',
       scriptPath: '/home/pi/Documents/BarDuino/py',
@@ -53,6 +54,24 @@ class Serve extends React.Component {
     PythonShell.run('test4.py', options, (err) => {
       if (err) throw err;
       // results is an array consisting of messages collected during execution
+    });
+    */
+    const python = require('child_process').spawn(
+      'python',
+      // second argument is array of parameters, e.g.:
+      ['/home/pi/Documents/BarDuino/py/test4.py', '17', '2'],
+    );
+    let output = '';
+    python.stdout.on('data', function (data) {
+      output += data;
+    });
+    python.on('close', function (code) {
+      if (code !== 0) {
+        console.log(output);
+        console.log(code);
+      }
+      console.log(output);
+      console.log(code);
     });
     // this.runAirPump();
   }
