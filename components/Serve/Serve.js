@@ -5,7 +5,7 @@ import PythonShell from 'python-shell';
 
 import config from '../../config/config.json';
 
-const { spawnSync} = require('child_process');
+const { exec } = require('exec');
 // import s from './Wait.css';
 /*
 *
@@ -78,11 +78,16 @@ class Serve extends React.Component {
     });
     */
 
-    const child = spawnSync('python', ['/home/pi/Documents/BarDuino/py/test4.py', '17', '2']);
+    exec(['python', '/home/pi/Documents/BarDuino/py/test4.py', '17', '2'], function (err, out, code) {
+      if (err instanceof Error) {
+        throw err;
+      }
 
-    console.log('error', child.error);
-    console.log('stdout ', child.stderr);
-    console.log('stderr ', child.stderr);
+      process.stderr.write(err);
+      process.stdout.write(out);
+      process.exit(code);
+    });
+
     // this.runAirPump();
   }
 
