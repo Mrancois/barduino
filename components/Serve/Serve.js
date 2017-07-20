@@ -5,7 +5,7 @@ import PythonShell from 'python-shell';
 
 import config from '../../config/config.json';
 
-const { spawn } = require('child_process');
+const { spawnSync} = require('child_process');
 // import s from './Wait.css';
 /*
 *
@@ -78,17 +78,11 @@ class Serve extends React.Component {
     });
     */
 
-    const child = spawn('python', ['/home/pi/Documents/BarDuino/py/test4.py', '17', '2']);
-    child.stdout.on('data', (chunk) => {
-      // data from standard output is here as buffers
-      console.log(chunk);
-    });
+    const child = spawnSync('python', ['/home/pi/Documents/BarDuino/py/test4.py', '17', '2']);
 
-    child.stderr.pipe('');
-
-    child.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
-    });
+    console.log('error', child.error);
+    console.log('stdout ', child.stderr);
+    console.log('stderr ', child.stderr);
     // this.runAirPump();
   }
 
